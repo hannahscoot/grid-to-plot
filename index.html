@@ -1,0 +1,154 @@
+<html>
+    <head>
+        <style>
+            #grid {
+            font-size: 0;
+            margin: 0 0 10px 0;
+            }
+            #grid > ul {
+            padding: 0;
+            margin: 0;
+            }
+            #grid > ul > li {
+            overflow: hidden;
+            display: inline-block;
+            width: 13px;
+            height: 91px;
+            margin: 0;
+            }
+            #grid > ul > li > ul {
+            padding: 0;
+            margin: 0;
+            }
+            #grid > ul > li > ul > li {
+            border: 1px solid #fff;
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            overflow: hidden;
+            background-color: #eee;
+            }
+            #palette label {
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            margin: 10px;
+            overflow: hidden;
+            border: 2px solid #808080;
+            cursor: pointer;
+            color: black;
+            }
+            textarea {
+            font-family: monospace;
+            font-size: 10px;
+            display: block;
+            width: 600px;
+            height: 120px;
+            margin: 0 0 10px 0;
+            }
+        </style>
+    </head>
+    <body ng-app="exampleModule" ng-controller="exampleController as vm">
+    <div id="grid">
+        <ul>
+            <li ng-repeat="num in vm.array">
+                <ul>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[0][num]}"></li>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[1][num]}"></li>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[2][num]}"></li>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[3][num]}"></li>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[4][num]}"></li>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[5][num]}"></li>
+                    <li class="pixel" ng-style="{'background-color': vm.outputArray[6][num]}"></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div id="palette">
+        <label ng-style="{'background-color': vm.colourScheme[0]}">
+            zero
+        </label>
+        <label ng-style="{'background-color': vm.colourScheme[1]}">
+            one
+        </label>
+        <label ng-style="{'background-color': vm.colourScheme[2]}">
+            two
+        </label>
+        <label ng-style="{'background-color': vm.colourScheme[3]}">
+            three
+        </label>
+        <label ng-style="{'background-color': vm.colourScheme[4]}">
+            four
+        </label>
+    </div>
+    <input type="text" ng-model="vm.width"><button ng-click="vm.generate()">Generate</button>
+    <button ng-click="vm.generateColourCodeArray(vm.demoArray)">Colour</button>
+    <button ng-click="vm.clear()">Clear All</button>
+    <br>
+    <textarea id="textArea"></textarea>
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('exampleModule', [])
+        app.controller("exampleController", function() {
+            var vm = this;
+
+            vm.colourScheme = ['ebedf0', '9be9a8', '40c463', '30a14e', '215e39']
+            vm.width = '';
+            vm.array = [];
+            vm.outputArray=[];
+            
+            vm.demoArray = [
+                [0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1],
+                [0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,3,3,4,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+                [1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,2,2,0,0,0,0,1,1,3,3,4,4,4,3,1,1,1,4,1,1,1,1,2,0,0,0,0,3,1,1,1,0,0,0,0],
+                [1,1,1,1,1,1,1,1,3,4,1,1,1,1,1,2,2,2,2,2,1,1,1,3,3,3,3,4,4,4,4,3,3,3,4,3,1,1,2,2,1,1,1,3,3,4,1,1,1,1,1,0],
+                [1,1,1,1,1,1,3,3,4,4,4,4,1,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,3,3,3,4,4,3,2,2,2,2,1,3,3,3,4,4,4,3,1,1,1],
+                [1,1,1,3,3,3,3,4,4,4,4,4,4,4,2,2,2,2,2,2,3,3,3,3,4,4,4,4,4,4,4,4,3,4,4,4,4,4,2,3,3,3,3,3,4,4,4,4,4,4,3,1],
+                [1,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,2,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+            ]
+
+            vm.generate = function () { //Generates Array To Iterate Over in View
+                vm.array = [];
+                for (let i=0; i<parseInt(vm.width); i++) {
+                    vm.array.push(i);
+                }
+            }
+
+            vm.generateColourCodeArray = function (arr) { //Generates Colour Map of Array
+                vm.outputArray = arr.slice(); // FIND A WAY TO DO THIS NON-REFERENCIAL
+                for (let i=0; i<vm.outputArray[0].length; i++) {
+                    for (let j=0; j<vm.outputArray.length; j++) {
+                        switch(vm.outputArray[j][i]) {
+                            case 1:
+                                vm.outputArray[j][i] = vm.colourScheme[1];
+                                break;
+                            case 2:
+                                vm.outputArray[j][i] = vm.colourScheme[2];
+                                break;
+                            case 3:
+                                vm.outputArray[j][i] = vm.colourScheme[3];
+                                break;
+                            case 4:
+                                vm.outputArray[j][i] = vm.colourScheme[4];
+                                break;
+                            default:
+                                vm.outputArray[j][i] = vm.colourScheme[0];
+                        }
+                    }
+                }
+                document.getElementById("textArea").value= 
+                    '[['+arr[0]+']\n['+arr[1]+']\n['+arr[2]+']\n['+arr[3]+']\n['+arr[4]+']\n['+arr[5]+']\n['+arr[6]+']]';   
+            }
+
+            vm.clear = function () {
+                vm.outputArray=[];
+                document.getElementById("textArea").value='';
+                vm.array = [];
+                vm.width='';
+            }
+        })
+    </script>
+
+</html>
