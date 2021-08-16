@@ -82,7 +82,7 @@
         </label>
     </div>
     <input type="text" ng-model="vm.width"><button ng-click="vm.generate()">Generate</button>
-    <button ng-click="vm.generateColourCodeArray(vm.demoArray)">Colour</button>
+    <button ng-click="vm.generateColourCodeArray()">Colour</button>
     <button ng-click="vm.clear()">Clear All</button>
     <br>
     <textarea id="textArea"></textarea>
@@ -116,8 +116,8 @@
                 }
             }
 
-            vm.generateColourCodeArray = function (arr) { //Generates Colour Map of Array
-                vm.outputArray = arr.slice(); // FIND A WAY TO DO THIS NON-REFERENCIAL
+            vm.generateColourCodeArray = function () { //Generates Colour Map of Array
+                vm.outputArray = JSON.parse(JSON.stringify(vm.demoArray));
                 for (let i=0; i<vm.outputArray[0].length; i++) {
                     for (let j=0; j<vm.outputArray.length; j++) {
                         switch(vm.outputArray[j][i]) {
@@ -139,7 +139,7 @@
                     }
                 }
                 document.getElementById("textArea").value= 
-                    '[['+arr[0]+']\n['+arr[1]+']\n['+arr[2]+']\n['+arr[3]+']\n['+arr[4]+']\n['+arr[5]+']\n['+arr[6]+']]';   
+                    '[['+vm.demoArray[0]+']\n['+vm.demoArray[1]+']\n['+vm.demoArray[2]+']\n['+vm.demoArray[3]+']\n['+vm.demoArray[4]+']\n['+vm.demoArray[5]+']\n['+vm.demoArray[6]+']]';   
             }
 
             vm.clear = function () {
