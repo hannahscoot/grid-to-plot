@@ -47,45 +47,65 @@
             margin: 0 0 10px 0;
             }
         </style>
+        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     </head>
     <body ng-app="exampleModule" ng-controller="exampleController as vm">
-    <div id="grid">
-        <ul>
-            <li ng-repeat="num in vm.array">
-                <ul>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[0][num]}"></li>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[1][num]}"></li>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[2][num]}"></li>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[3][num]}"></li>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[4][num]}"></li>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[5][num]}"></li>
-                    <li class="pixel" ng-style="{'background-color': vm.outputArray[6][num]}"></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div id="palette">
-        <label ng-style="{'background-color': vm.colourScheme[0]}">
-            zero
-        </label>
-        <label ng-style="{'background-color': vm.colourScheme[1]}">
-            one
-        </label>
-        <label ng-style="{'background-color': vm.colourScheme[2]}">
-            two
-        </label>
-        <label ng-style="{'background-color': vm.colourScheme[3]}">
-            three
-        </label>
-        <label ng-style="{'background-color': vm.colourScheme[4]}">
-            four
-        </label>
-    </div>
-    <input type="text" ng-model="vm.width"><button ng-click="vm.generate()">Generate</button>
-    <button ng-click="vm.generateColourCodeArray()">Colour</button>
-    <button ng-click="vm.clear()">Clear All</button>
-    <br>
-    <textarea id="textArea"></textarea>
+        <p class="p-20 font-sans text-2xl font-light tracking-wider text-center align-text-bottom">GitHub Contribution Map Configurator</p>
+        <div ng-if="vm.width">
+            <div class="p-10">
+                <div id="grid">
+                    <ul>
+                        <li ng-repeat="num in vm.array">
+                            <ul>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[0][num]}"></li>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[1][num]}"></li>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[2][num]}"></li>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[3][num]}"></li>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[4][num]}"></li>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[5][num]}"></li>
+                                <li class="pixel" ng-style="{'background-color': vm.outputArray[6][num]}"></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="palette">
+                    <label ng-style="{'background-color': vm.colourScheme[0]}">
+                        zero
+                    </label>
+                    <label ng-style="{'background-color': vm.colourScheme[1]}">
+                        one
+                    </label>
+                    <label ng-style="{'background-color': vm.colourScheme[2]}">
+                        two
+                    </label>
+                    <label ng-style="{'background-color': vm.colourScheme[3]}">
+                        three
+                    </label>
+                    <label ng-style="{'background-color': vm.colourScheme[4]}">
+                        four
+                    </label>
+                </div>
+                <button ng-click="vm.generateColourCodeArray()">Colour</button>
+                <button ng-click="vm.convertTextToColour()">Convert Colour</button>
+                <button ng-click="vm.clear()">Clear All</button>
+                <br>
+                <textarea id="textArea"></textarea>
+            </div>
+        </div>
+        <div ng-if="!vm.width">
+            <p class="p-2 font-sans text-md font-light text-center align-text-bottom">To start, enter the width you want to work with, the standard is 52</p>
+            <div class="p-10 max-w-sm m-auto">
+                <div class="flex border-grey-light border">
+                    <input class="w-full rounded ml-1 focus:outline-none" type="text" ng-model="vm.userWidth">
+                    <button class="bg-grey-lightest border-grey border-l shadow hover:bg-grey-lightest" ng-click="vm.generate()">
+                      <span class="w-auto flex justify-end items-center text-grey p-2 hover:text-grey-darkest">
+                        <i class="bi bi-chevron-right"></i>
+                      </span>
+                    </button>
+                  </div>
+              </div>
+        </div>
     </body>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
@@ -95,9 +115,11 @@
             var vm = this;
 
             vm.colourScheme = ['ebedf0', '9be9a8', '40c463', '30a14e', '215e39']
-            vm.width = '';
+            vm.userWidth = '';
+            vm.width = 0;
             vm.array = [];
-            vm.outputArray=[];
+            vm.outputArray = [];
+            vm.userInput = '';
             
             vm.demoArray = [
                 [0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1],
@@ -111,13 +133,58 @@
 
             vm.generate = function () { //Generates Array To Iterate Over in View
                 vm.array = [];
-                for (let i=0; i<parseInt(vm.width); i++) {
-                    vm.array.push(i);
+                try {
+                    vm.width = parseInt(vm.userWidth);
+                    for (let i=0; i<vm.width; i++) {
+                        vm.array.push(i);
+                    }
+                } 
+                catch {
+                    console.log("Not correct format > Didn't type a valid number.")
                 }
+                
+            }
+
+            vm.convertTextToArray = function () { //Converts string from TextArea to an Array
+                try {
+                    vm.userInput = JSON.parse(document.getElementById("textArea").value);
+                    return vm.userInput;
+                }
+                catch {
+                    console.log("Not correct format > Can't be converted to a array.")
+                }
+            }
+
+            vm.convertTextToColour = function () { //Generates Colour Map of Array from TextBox
+                vm.outputArray = JSON.parse(JSON.stringify(vm.convertTextToArray()));
+                console.log(vm.outputArray);
+                for (let i=0; i<vm.outputArray[0].length; i++) {
+                    for (let j=0; j<vm.outputArray.length; j++) {
+                        switch(vm.outputArray[j][i]) {
+                            case 1:
+                                vm.outputArray[j][i] = vm.colourScheme[1];
+                                break;
+                            case 2:
+                                vm.outputArray[j][i] = vm.colourScheme[2];
+                                break;
+                            case 3:
+                                vm.outputArray[j][i] = vm.colourScheme[3];
+                                break;
+                            case 4:
+                                vm.outputArray[j][i] = vm.colourScheme[4];
+                                break;
+                            default:
+                                vm.outputArray[j][i] = vm.colourScheme[0];
+                        }
+                    }
+                }  
+                document.getElementById("textArea").value= 
+                    '[['+vm.userInput[0]+'],\n['+vm.userInput[1]+'],\n['+vm.userInput[2]+'],\n['+vm.userInput[3]+'],\n['+vm.userInput[4]+'],\n['+vm.userInput[5]+'],\n['+vm.userInput[6]+']]';
             }
 
             vm.generateColourCodeArray = function () { //Generates Colour Map of Array
                 vm.outputArray = JSON.parse(JSON.stringify(vm.demoArray));
+                vm.userInput = JSON.parse(JSON.stringify(vm.demoArray));
                 for (let i=0; i<vm.outputArray[0].length; i++) {
                     for (let j=0; j<vm.outputArray.length; j++) {
                         switch(vm.outputArray[j][i]) {
@@ -139,14 +206,17 @@
                     }
                 }
                 document.getElementById("textArea").value= 
-                    '[['+vm.demoArray[0]+']\n['+vm.demoArray[1]+']\n['+vm.demoArray[2]+']\n['+vm.demoArray[3]+']\n['+vm.demoArray[4]+']\n['+vm.demoArray[5]+']\n['+vm.demoArray[6]+']]';   
+                    '[['+vm.userInput[0]+'],\n['+vm.userInput[1]+'],\n['+vm.userInput[2]+'],\n['+vm.userInput[3]+'],\n['+vm.userInput[4]+'],\n['+vm.userInput[5]+'],\n['+vm.userInput[6]+']]';   
             }
 
             vm.clear = function () {
                 vm.outputArray=[];
                 document.getElementById("textArea").value='';
                 vm.array = [];
-                vm.width='';
+                vm.outputArray = [];
+                vm.userInput = '';
+                vm.width=0;
+                vm.userWidth='';
             }
         })
     </script>
