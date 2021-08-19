@@ -13,7 +13,8 @@ The grid is bound by the styling of github's front page, so the grid is always 7
 > 
 ---
 > ToDos;
-> - Styling of the edit page
+> - Instructions for use
+> - Click on a colour then click on a square to change colour > change colour of cursor maybe?
 > - Export custom grid to a script -> user downloadable file which will generate the contribution grid on your page.
 ---
 _Template.txt contains a reference array just in case you delete the array stored in `vm.demoArray`._
