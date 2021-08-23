@@ -56,10 +56,29 @@
     <body ng-app="exampleModule" ng-controller="exampleController as vm">
         <p class="p-20 font-sans text-2xl font-light tracking-wider text-center align-text-bottom">GitHub Contribution Map Configurator</p>
         <div ng-if="vm.width">
+            <div class="p-2 font-sans text-md font-light text-center">
+                <p>
+                    + CLick Randomize to fill every square with a random colour.
+                </p>
+                <p>
+                    + Click From Script to fill the squares from the example array in the code.
+                </p>
+                <br>
+                <p>
+                    + You can edit the grid by either of the following methods:
+                </p>
+                <p>
+                    > Editing the text area, replacing a number with 0, 1, 2, 3 or 4 then clicking Generate.
+                </p>
+                <p>
+                    > Selecting a colour on the right, and clicking on the square you wish to colour.
+                </p>
+                <br>
+                <p>
+                    When you are all done, clicking export will start to generate your script.
+                </p>
+            </div>
             <div class="p-10 flex justify-center">
-                <div class="mx-3 mb-2 p-4 bg-white border border-gray-300">
-                    How-To:
-                </div>
                 <table>
                     <tr>
                         <td>
