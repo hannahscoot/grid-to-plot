@@ -26,7 +26,7 @@
             width: 20px;
             height: 20px;
             overflow: hidden;
-            cursor: pointer;
+            cursor: url('pencil.png'),auto;
             background-color: #eee;
             }
             #palette li {
@@ -35,8 +35,8 @@
             margin: 2px !important;
             overflow: hidden;
             font-size: xx-small !important;
-            border: 2px solid #808080 !important;
-            cursor: pointer;
+            border: 2px solid #808080;
+            cursor: url('eyedropper.png'),auto;
             color: black;
             }
             textarea {
@@ -45,6 +45,9 @@
             display: block;
             margin: 0 0 10px 0;
             border: 1px solid black;
+            }
+            .activePalette {
+            border: 2px solid coral !important;
             }
         </style>
         <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
@@ -62,15 +65,15 @@
                         <td>
                             <div id="grid">
                                 <ul>
-                                    <li ng-repeat="num in vm.array"> <!--/////////////////////// Move into columns ////////////////////-->
+                                    <li ng-repeat="num in vm.iteratingArray"> <!--/////////////////////// Move into columns ////////////////////-->
                                         <ul>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[0][num]}"></li>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[1][num]}"></li>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[2][num]}"></li>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[3][num]}"></li>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[4][num]}"></li>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[5][num]}"></li>
-                                            <li class="pixel" ng-style="{'background-color': vm.outputArray[6][num]}"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[0][num]}" ng-click="vm.changeSquareColour(0, num)"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[1][num]}" ng-click="vm.changeSquareColour(1, num)"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[2][num]}" ng-click="vm.changeSquareColour(2, num)"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[3][num]}" ng-click="vm.changeSquareColour(3, num)"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[4][num]}" ng-click="vm.changeSquareColour(4, num)"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[5][num]}" ng-click="vm.changeSquareColour(5, num)"></li>
+                                            <li class="pixel" ng-style="{'background-color': vm.current_ColourArray[6][num]}" ng-click="vm.changeSquareColour(6, num)"></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -79,19 +82,19 @@
                         <td class="justify-left align-top">
                             <div style="min-width: 40px !important; padding-top: 2px" class="px-6"> <!--/////////////////////// Move into columns ////////////////////-->
                                 <ul id="palette">
-                                    <li ng-style="{'background-color': vm.colourScheme[0]}">
+                                    <li ng-style="{'background-color': vm.colourScheme[0]}" ng-click="vm.switchActiveColour(0)" id="palette0" class="activePalette">
                                         0
                                     </li>
-                                    <li ng-style="{'background-color': vm.colourScheme[1]}">
+                                    <li ng-style="{'background-color': vm.colourScheme[1]}" ng-click="vm.switchActiveColour(1)" id="palette1">
                                         1
                                     </li>
-                                    <li ng-style="{'background-color': vm.colourScheme[2]}">
+                                    <li ng-style="{'background-color': vm.colourScheme[2]}" ng-click="vm.switchActiveColour(2)" id="palette2">
                                         2
                                     </li>
-                                    <li ng-style="{'background-color': vm.colourScheme[3]}">
+                                    <li ng-style="{'background-color': vm.colourScheme[3]}" ng-click="vm.switchActiveColour(3)" id="palette3">
                                         3
                                     </li>
-                                    <li ng-style="{'background-color': vm.colourScheme[4]}">
+                                    <li ng-style="{'background-color': vm.colourScheme[4]}" ng-click="vm.switchActiveColour(4)" id="palette4">
                                         4
                                     </li>
                                 </ul>
@@ -100,23 +103,23 @@
                     </tr>
                     <tr>
                         <td>
-                            <textarea id="textArea" class="tracking-widest" ng-model="vm.initial" ng-style="{'min-width': vm.width*20, 'min-height': 140, 'padding-left': 5}"></textarea>
+                            <textarea id="textArea" class="tracking-widest" ng-model="vm.current_NumberString" ng-style="{'min-width': vm.width*20, 'min-height': 140, 'padding-left': 5}"></textarea>
                         </td>
                         <td class="p-3 pl-6 text-sm">
                             <div class="flex justify-center">
                                 <div class="bg-white border border-gray-300">
                                     <ul class="divide-y divide-gray-300">
                                         <li class="p-2 hover:bg-gray-50 cursor-pointer">
-                                            <button ng-click="vm.generateRandomColourArray()" style="width: 100%; text-align: left;">Randomize</button>
+                                            <button ng-click="vm.randomizeSquareColour()" style="width: 100%; text-align: left;">Randomize</button>
                                         </li>
                                         <li class="p-2 hover:bg-gray-50 cursor-pointer">
-                                            <button ng-click="vm.generateColourCodeArray()" style="width: 100%; text-align: left;">From Script</button>
+                                            <button ng-click="vm.squareColourFromFile()" style="width: 100%; text-align: left;">From Script</button>
                                         </li>
                                         <li class="p-2 hover:bg-gray-50 cursor-pointer">
                                             <button ng-click="vm.clear()" style="width: 100%; text-align: left;">Reset</button>
                                         </li>
                                         <li class="p-2 hover:bg-gray-50 cursor-pointer">
-                                            <button style="width: 100%; text-align: left;">Export</button>
+                                            <button style="width: 100%; text-align: left;" disabled>Export</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -125,7 +128,7 @@
                         <td class="p-2 text-sm">
                             <div class="flex justify-center">
                                 <div class="bg-white border border-gray-300">
-                                    <button ng-click="vm.convertTextToColour()" class="p-3 py-16 hover:bg-gray-50 cursor-pointer">Generate</button>
+                                    <button ng-click="vm.updateColourByText()" class="p-3 py-16 hover:bg-gray-50 cursor-pointer">Generate</button>
                                 </div>
                             </div>
                             
@@ -138,7 +141,7 @@
             <p class="p-2 font-sans text-md font-light text-center align-text-bottom">To start, enter the width you want to work with, the standard is 52</p>
             <div class="p-10 max-w-sm m-auto">
                 <div class="flex border-grey-light border">
-                    <input class="w-full rounded ml-1 focus:outline-none" type="text" ng-model="vm.inputWidthString">
+                    <input class="w-full rounded ml-1 focus:outline-none" type="text" ng-model="vm.widthString">
                     <button class="bg-grey-lightest border-grey border-l shadow hover:bg-grey-lightest" ng-click="vm.generate()">
                       <span class="w-auto flex justify-end items-center text-grey p-2 hover:text-grey-darkest">
                         <i class="bi bi-chevron-right"></i>
@@ -155,15 +158,6 @@
         app.controller("exampleController", function() {
             var vm = this;
 
-            vm.colourScheme = ['ebedf0', '9be9a8', '40c463', '30a14e', '215e39']
-            vm.inputWidthString = '';
-            vm.width = 0;
-            vm.array = [];
-            vm.outputArray = []; //Array with colour codes
-            vm.userInput = ''; 
-            vm.test = [];
-            vm.initial = '';
-            
             vm.demoArray = [
                 [0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1],
                 [0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,3,3,4,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -174,117 +168,158 @@
                 [1,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,2,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
             ]
 
-            vm.generate = function () { //Generates Empty Array To Iterate Over in View
-                vm.array = [];
+            vm.colourScheme = ['ebedf0', '9be9a8', '40c463', '30a14e', '215e39']
+
+            vm.width = 0;
+            vm.widthString = '';
+            vm.iteratingArray = [];
+            vm.current_ColourArray = [];
+            vm.current_NumberArray = [];
+            vm.current_NumberString = '';
+            vm.current_SelectedColour = 0;
+            
+            vm.convertStringToArray = function (stringToBeConverted) {
                 try {
-                    vm.width = parseInt(vm.inputWidthString);
+                    return JSON.parse(stringToBeConverted);
+                }
+                catch {
+                    console.log("Unable to convert literal string to number array.")
+                }
+            }
+
+            vm.convertArrayToString = function (arrayToBeConverted) {
+                try {
+                    var stringToBeReturned = '[';
+                    for (let i=0; i<arrayToBeConverted.length; i++) {
+                        if (i == arrayToBeConverted.length-1) {
+                            stringToBeReturned += "["+arrayToBeConverted[i]+"]]";
+                        }
+                        else {
+                            stringToBeReturned += "["+arrayToBeConverted[i]+"],\n";
+                        }
+                    }
+                    return stringToBeReturned;
+                }
+                catch {
+                    console.log("Unable to convert number array to literal string.");
+                }
+            }
+
+            vm.convertNumberToColourMap = function (arrayToBeConverted) {
+                try {
+                    var arrayToBeReturned = JSON.parse(JSON.stringify(arrayToBeConverted));
+                    for (let i=0; i<arrayToBeConverted[0].length; i++) {
+                        for (let j=0; j<arrayToBeConverted.length; j++) {
+                            arrayToBeReturned[j][i] = vm.convertNumberToColour(arrayToBeConverted[j][i]);
+                        }
+                    }
+                    return arrayToBeReturned; 
+                }
+                catch {
+                    console.log("Unable to convert number array to colour map.");
+                } 
+            }
+
+            vm.convertNumberToColour = function (numberToBeConverted) {
+                switch(numberToBeConverted) {
+                    case 1:
+                        return vm.colourScheme[1];
+                    case 2:
+                        return vm.colourScheme[2];
+                    case 3:
+                        return vm.colourScheme[3];
+                    case 4:
+                        return vm.colourScheme[4];
+                    default:
+                        return vm.colourScheme[0];
+                }
+            }
+
+            vm.generate = function () {
+                try {
+                    vm.width = parseInt(vm.widthString);
                     for (let i=0; i<vm.width; i++) {
-                        vm.array.push(i);
-                    }                 
+                        vm.iteratingArray.push(i);
+                    }
+                    vm.current_NumberArray = Array.from(Array(7), _ => Array(vm.width).fill(0));
+                    vm.current_NumberString = vm.convertArrayToString(vm.current_NumberArray);
+                    vm.current_ColourArray = vm.convertNumberToColourMap(vm.current_NumberArray);                 
                 } 
                 catch {
-                    console.log("Not correct format > Didn't type a valid number.")
+                    console.log("Didn't enter positive integer number.");
                 }
-                vm.test = Array.from(Array(7), _ => Array(vm.width).fill(0));
-                vm.initial = vm.convertArrayToString(vm.test);
             }
 
-            vm.convertTextToArray = function () { //Converts string from TextArea to an Array
+            vm.switchActiveColour = function(colourNumber) {
                 try {
-                    vm.userInput = JSON.parse(document.getElementById("textArea").value);
-                    return vm.userInput;
+                    document.getElementById("palette"+vm.current_SelectedColour).classList.remove("activePalette");
+                    vm.current_SelectedColour = colourNumber;
+                    document.getElementById("palette"+ vm.current_SelectedColour).classList.add("activePalette");
                 }
                 catch {
-                    console.log("Not correct format > Can't be converted to a array.")
+                    console.log("Unable to change colours??")
                 }
             }
 
-            vm.convertArrayToString = function (arr) { //Converts Array to string suitible for TextArea
-                var arrayString = '[';
-                for (let i=0; i<arr.length; i++) {
-                    if (i == arr.length-1) {
-                        arrayString += "["+arr[i]+"]]";
-                    }
-                    else {
-                        arrayString += "["+arr[i]+"],\n";
-                    }
+            vm.changeSquareColour = function(row, column) {
+                try {
+                    vm.current_NumberArray[row][column] = vm.current_SelectedColour;
+                    vm.current_NumberString = vm.convertArrayToString(vm.current_NumberArray);
+                    vm.current_ColourArray = vm.convertNumberToColourMap(vm.current_NumberArray);
                 }
-                return arrayString;
+                catch {
+                    console.log("Didn't click on a square???? or something");
+                }
             }
-
-            vm.convertTextToColour = function () { //Generates Colour Map of Array from TextBox
-                vm.outputArray = JSON.parse(JSON.stringify(vm.convertTextToArray()));
-                for (let i=0; i<vm.outputArray[0].length; i++) {
-                    for (let j=0; j<vm.outputArray.length; j++) {
-                        switch(vm.outputArray[j][i]) {
-                            case 1:
-                                vm.outputArray[j][i] = vm.colourScheme[1];
-                                break;
-                            case 2:
-                                vm.outputArray[j][i] = vm.colourScheme[2];
-                                break;
-                            case 3:
-                                vm.outputArray[j][i] = vm.colourScheme[3];
-                                break;
-                            case 4:
-                                vm.outputArray[j][i] = vm.colourScheme[4];
-                                break;
-                            default:
-                                vm.outputArray[j][i] = vm.colourScheme[0];
+            
+            vm.randomizeSquareColour = function () {
+                try {
+                    for (let i=0; i<vm.current_NumberArray[0].length; i++) {
+                        for (let j=0; j<vm.current_NumberArray.length; j++) {
+                            vm.current_NumberArray[j][i] = Math.floor(Math.random() * 5);
                         }
                     }
-                }  
-                document.getElementById("textArea").value = vm.convertArrayToString(vm.userInput);
-            }
-
-            vm.generateColourCodeArray = function () { //Generates Colour Map of Array
-                vm.outputArray = JSON.parse(JSON.stringify(vm.demoArray));
-                vm.userInput = JSON.parse(JSON.stringify(vm.demoArray));
-                for (let i=0; i<vm.outputArray[0].length; i++) {
-                    for (let j=0; j<vm.outputArray.length; j++) {
-                        switch(vm.outputArray[j][i]) {
-                            case 1:
-                                vm.outputArray[j][i] = vm.colourScheme[1];
-                                break;
-                            case 2:
-                                vm.outputArray[j][i] = vm.colourScheme[2];
-                                break;
-                            case 3:
-                                vm.outputArray[j][i] = vm.colourScheme[3];
-                                break;
-                            case 4:
-                                vm.outputArray[j][i] = vm.colourScheme[4];
-                                break;
-                            default:
-                                vm.outputArray[j][i] = vm.colourScheme[0];
-                        }
-                    }
+                    vm.current_NumberString = vm.convertArrayToString(vm.current_NumberArray);
+                    vm.current_ColourArray = vm.convertNumberToColourMap(vm.current_NumberArray);
                 }
-                document.getElementById("textArea").value = vm.convertArrayToString(vm.userInput);
-            }
-
-            vm.generateRandomColourArray = function() { //Generates Random Colour Map of Array
-                vm.outputArray = JSON.parse(JSON.stringify(vm.test));
-                vm.userInput = JSON.parse(JSON.stringify(vm.test));
-                for (let i=0; i<vm.outputArray[0].length; i++) {
-                    for (let j=0; j<vm.outputArray.length; j++) {
-                        var randomNumber = Math.floor(Math.random() * 5);
-                        vm.outputArray[j][i] = vm.colourScheme[randomNumber];
-                        vm.userInput[j][i] = randomNumber;
-                    }
+                catch {
+                    console.log("something went wrong colouring all these squares");
                 }
-                document.getElementById("textArea").value = vm.convertArrayToString(vm.userInput);
             }
 
+            vm.squareColourFromFile = function () {
+                try {
+                    for (let i=0; i<vm.current_NumberArray.length; i++) {
+                        vm.current_NumberArray[i] = JSON.parse(JSON.stringify(vm.demoArray[i].slice(0, vm.width)));
+                    }
+                    vm.current_NumberString = vm.convertArrayToString(vm.current_NumberArray);
+                    vm.current_ColourArray = vm.convertNumberToColourMap(vm.current_NumberArray);
+                }
+                catch {
+                    console.log("something went wrong with the array file.");
+                }
+            }
+
+            vm.updateColourByText = function () {
+                try {
+                    vm.current_NumberArray = vm.convertStringToArray(vm.current_NumberString);
+                    vm.current_ColourArray = vm.convertNumberToColourMap(vm.current_NumberArray);
+                }
+                catch {
+                    console.log("something went wrong with generating new version.");
+                }
+            }
+            
             vm.clear = function () {
-                document.getElementById("textArea").value='';
-                vm.outputArray=[];
-                vm.array = [];
-                vm.outputArray = [];
-                vm.userInput = '';
-                vm.width=0;
-                vm.userWidth='';
+                vm.width = 0;
+                vm.widthString = '';
+                vm.iteratingArray = [];
+                vm.current_ColourArray = [];
+                vm.current_NumberArray = [];
+                vm.current_NumberString = '';
+                vm.current_SelectedColour = 0;
             }
+
         })
     </script>
 
